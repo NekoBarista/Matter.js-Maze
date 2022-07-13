@@ -5,7 +5,7 @@ const {world} = engine;
 
 const width = 600;
 const height = 600;
-const cells = 3;
+const cells = 15;
 
 const unitLength = width / cells;
 
@@ -28,18 +28,18 @@ Runner.run(Runner.create(), engine);
 
 // Walls
 const walls = [
-Bodies.rectangle(width / 2, 0, width, 40, {
+Bodies.rectangle(width / 2, 0, width, 2, {
     isStatic: true
 }),
-Bodies.rectangle(width / 2, height , width, 40, { isStatic: true
+Bodies.rectangle(width / 2, height , width, 2, { isStatic: true
 
 }),
 
-Bodies.rectangle(0,height / 2, 40, height, { isStatic: true
+Bodies.rectangle(0,height / 2, 2, height, { isStatic: true
 
 }),
 
-Bodies.rectangle(width,height / 2, 40, height, { isStatic: true
+Bodies.rectangle(width,height / 2, 2, height, { isStatic: true
 
 })
 ]; 
@@ -171,3 +171,29 @@ Composite.add(world, wall);
     });
    
 })
+
+
+// goal drawing
+
+const goal = Bodies.rectangle(
+width - unitLength / 2, 
+height - unitLength / 2, 
+unitLength *.7,
+unitLength *.7, {
+    isStatic: true
+}
+);
+
+
+Composite.add(world, goal)
+
+// ball drawing
+
+const ball = Bodies.circle(
+unitLength / 2,
+unitLength / 2, 
+unitLength / 4,
+
+)
+
+Composite.add(world, ball)
