@@ -12,8 +12,8 @@ const {world} = engine;
 
 const width = window.innerWidth;
 const height = window.innerHeight;
-const cellsHorizontal = 3
-const cellsVertical = 2
+const cellsHorizontal = 30
+const cellsVertical = 15
 const unitLengthX = width / cellsHorizontal;
 const unitLengthY = height / cellsVertical;
 
@@ -220,32 +220,21 @@ Composite.add(world, ball)
 
 
 // add keypress
-document.addEventListener('keydown', event => {
+document.addEventListener('keydown', (event) => {
 
-    const {x, y} = ball.velocity
-    document.querySelector(".instructions").classList.add('hidden')
-
-    if(event.code === "KeyW") {
-        Body.setVelocity(ball, {x, y: y-5})
-
-        }
-
-    if(event.code === "KeyS") {
-        Body.setVelocity(ball, {x, y: y+5})
+    document.querySelector('.instructions').classList.add('hidden')
+    const { x, y } = ball.velocity;
+    const speedLimit = 5;
+    if (event.code === 'KeyW') {
+        Body.setVelocity(ball, { x, y: Math.max(y - 5, -speedLimit) });
+    } else if (event.code === 'KeyS') {
+        Body.setVelocity(ball, { x, y: Math.min(y + 5, speedLimit) });
+    } else if (event.code === 'KeyA') {
+        Body.setVelocity(ball, { x: Math.max(x - 5, -speedLimit), y });
+    } else if (event.code === 'KeyD') {
+        Body.setVelocity(ball, { x: Math.min(x + 5, speedLimit), y });
     }
-
-    if(event.code === "KeyD") {
-        Body.setVelocity(ball, {x: x+5, y})
-
-    }
-
-    if(event.code === "KeyA") {
-        Body.setVelocity(ball, {x: x-5, y})
-
-    }
-    
-})
-
+});
 // win state
 Events.on(engine,'collisionStart', event => {
   
