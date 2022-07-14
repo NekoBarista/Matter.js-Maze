@@ -34,12 +34,9 @@ console.log(rounds)
 
 const width = window.innerWidth;
 const height = window.innerHeight;
-<<<<<<< Updated upstream
-const cellsHorizontal = 1 * rounds
-const cellsVertical = 2 * rounds
-=======
 
->>>>>>> Stashed changes
+
+
 const unitLengthX = width / cellsHorizontal;
 const unitLengthY = height / cellsVertical;
 
@@ -296,13 +293,9 @@ playGame()
 
 const playBtn = document.querySelector('.button');
 playBtn.addEventListener('click', (event) => {
-<<<<<<< Updated upstream
-   rounds()
-   
-=======
+
 rounds()
 increaseCells()
->>>>>>> Stashed changes
 window.location.reload()
 
 })
@@ -350,7 +343,6 @@ window.onload = () => {
 } 
   
 
-<<<<<<< Updated upstream
 
 // Increment Rounds
 const rounds = () => {
@@ -359,15 +351,12 @@ const rounds = () => {
   storage("round", nextRound)
 }
 
-// Print Rounds to screen
+//  clear game
 
- 
-
-=======
 document.querySelector('.button-2').addEventListener('click', ()=>{
   localStorage.removeItem("round")
   localStorage.removeItem("cellsy")
   localStorage.removeItem("cellsx")
   location.reload()
 })
->>>>>>> Stashed changes
+
