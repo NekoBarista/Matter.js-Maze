@@ -1,4 +1,4 @@
-const {Engine, Render, Runner, Composite, Bodies, Body, Events, MouseConstraint, Mouse} = Matter;
+const {Engine, Render, Runner, Composite, Bodies, Body, Events} = Matter;
 
 
 const playGame= () => {
@@ -33,10 +33,6 @@ const render = Render.create({
 Render.run(render);
 Runner.run(Runner.create(), engine);
 
-//mouse control
-Composite.add(world, MouseConstraint.create(engine, {
-    mouse: Mouse.create(render.canvas)
-} ))
 
 
 
