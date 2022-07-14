@@ -1,5 +1,13 @@
 const {Engine, Render, Runner, Composite, Bodies, Body, Events} = Matter;
 
+let storedRound = Number(localStorage.getItem("round"))
+const round = document.querySelector('.round')
+
+let storedCellsX = Number(localStorage.getItem("cellsx"))
+let storedCellsY = Number(localStorage.getItem("cellsx"))
+let cellsHorizontal = storedCellsX > 6 ? storedCellsX : 6
+let cellsVertical = storedCellsY > 4 ? storedCellsY : 3
+
 
 const storage = (key, value) => {
   
@@ -9,6 +17,7 @@ const storage = (key, value) => {
 
 
 const playGame= () => { 
+
 
 
 const engine = Engine.create()
@@ -25,8 +34,12 @@ console.log(rounds)
 
 const width = window.innerWidth;
 const height = window.innerHeight;
+<<<<<<< Updated upstream
 const cellsHorizontal = 1 * rounds
 const cellsVertical = 2 * rounds
+=======
+
+>>>>>>> Stashed changes
 const unitLengthX = width / cellsHorizontal;
 const unitLengthY = height / cellsVertical;
 
@@ -266,6 +279,7 @@ labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)
             Body.setStatic(body, false)
             document.querySelector('.winner').classList.remove('hidden')
             document.querySelector('.button').classList.remove('hidden')
+            document.querySelector('.button-2').classList.remove('hidden')
         }
     })
 
@@ -282,13 +296,61 @@ playGame()
 
 const playBtn = document.querySelector('.button');
 playBtn.addEventListener('click', (event) => {
+<<<<<<< Updated upstream
    rounds()
    
+=======
+rounds()
+increaseCells()
+>>>>>>> Stashed changes
 window.location.reload()
 
 })
 
+const storage = (key, value) => {
+  if (key === "round") {
+    localStorage.setItem("round", value)
+  }
+  if (key === "score") {
+    localStorage.setItem("score", value)
+  }
+  if (key === "total") {
+    localStorage.setItem("total", value)
+  }
+  if (key === "cellsx") {
+    localStorage.setItem("cellsx", value)
+  }
+  if (key === "cellsy") {
+    localStorage.setItem("cellsy", value)
+  }
+}
 
+
+
+
+const rounds = () => {
+  let rounds = Number(round.innerHTML)
+  let nextRound = rounds + 1
+  round.innerHTML = nextRound
+  storage("round", nextRound)
+}
+
+const increaseCells = () => {
+  let addCellsX = cellsHorizontal + 2
+  let addCellsY = Math.floor((cellsHorizontal + 2) * .67)
+  
+  storage("cellsx", addCellsX)
+  storage("cellsy", addCellsY)
+}
+
+
+window.onload = () => {
+
+  round.innerHTML = storedRound
+} 
+  
+
+<<<<<<< Updated upstream
 
 // Increment Rounds
 const rounds = () => {
@@ -301,3 +363,11 @@ const rounds = () => {
 
  
 
+=======
+document.querySelector('.button-2').addEventListener('click', ()=>{
+  localStorage.removeItem("round")
+  localStorage.removeItem("cellsy")
+  localStorage.removeItem("cellsx")
+  location.reload()
+})
+>>>>>>> Stashed changes
