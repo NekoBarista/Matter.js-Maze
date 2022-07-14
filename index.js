@@ -275,3 +275,8 @@ const playBtn = document.querySelector('.button');
 playBtn.addEventListener('click', (event) => {
 window.location.reload()
 })
+
+document.addEventListener('click', ()=>{
+    document.querySelector('.instructions').classList.add('hidden')
+    
+})
