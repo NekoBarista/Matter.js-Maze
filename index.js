@@ -1,6 +1,8 @@
-const {Engine, Render, Runner, Composite, Bodies} = Matter;
+const {Engine, Render, Runner, Composite, Bodies, Body} = Matter;
 
 const engine = Engine.create()
+engine.world.gravity.y = 0;
+
 const {world} = engine;
 
 const width = 600;
@@ -197,3 +199,33 @@ unitLength / 4,
 )
 
 Composite.add(world, ball)
+
+
+
+// add keypress
+document.addEventListener('keydown', event => {
+
+    const {x, y} = ball.velocity
+
+    if(event.code === "KeyW") {
+        Body.setVelocity(ball, {x, y: y-5})
+
+        }
+
+    if(event.code === "KeyS") {
+        Body.setVelocity(ball, {x, y: y+5})
+    }
+
+    if(event.code === "KeyD") {
+        Body.setVelocity(ball, {x: x+5, y})
+
+    }
+
+    if(event.code === "KeyA") {
+        Body.setVelocity(ball, {x: x-5, y})
+
+    }
+    
+})
+
+// disable gravity
