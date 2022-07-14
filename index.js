@@ -277,15 +277,5 @@ playGame()
 
 const playBtn = document.querySelector('.button');
 playBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-  Composite.clear(world);
-  Engine.clear(engine);
-  Render.stop(render);
-  render.canvas.remove();
-  render.canvas = null;
-  render.context = null;
-  render.textures = {};
-  console.log('reset clicked');
-  document.querySelector('.winner').classList.add('hidden');
-  playGame()
+window.location.reload()
 })
