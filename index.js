@@ -1,19 +1,32 @@
 const {Engine, Render, Runner, Composite, Bodies, Body, Events} = Matter;
 
 
-const playGame= () => {
+const storage = (key, value) => {
+  
+  localStorage.setItem(key, value)
 
+}
+
+
+const playGame= () => { 
 
 
 const engine = Engine.create()
 engine.world.gravity.y = 0;
-
 const {world} = engine;
+
+if (!localStorage.getItem("round")) {
+
+storage("round", 1)}
+
+
+let rounds =  localStorage.getItem("round")
+console.log(rounds)
 
 const width = window.innerWidth;
 const height = window.innerHeight;
-const cellsHorizontal = 30
-const cellsVertical = 15
+const cellsHorizontal = 1 * rounds
+const cellsVertical = 2 * rounds
 const unitLengthX = width / cellsHorizontal;
 const unitLengthY = height / cellsVertical;
 
@@ -269,9 +282,22 @@ playGame()
 
 const playBtn = document.querySelector('.button');
 playBtn.addEventListener('click', (event) => {
+   rounds()
+   
 window.location.reload()
 
 })
 
 
-  
+
+// Increment Rounds
+const rounds = () => {
+  let rounds =  Number(localStorage.getItem("round"))
+  let nextRound = rounds + 1
+  storage("round", nextRound)
+}
+
+// Print Rounds to screen
+
+ 
+
