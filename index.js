@@ -1,16 +1,21 @@
-const {Engine, Render, Runner, Composite, Bodies, Body} = Matter;
+const {Engine, Render, Runner, Composite, Bodies, Body, Events} = Matter;
+
+
+const playGame= () => {
+
+
 
 const engine = Engine.create()
 engine.world.gravity.y = 0;
 
 const {world} = engine;
 
-const width = 600;
-const height = 600;
-const cells = 15;
-
-const unitLength = width / cells;
-
+const width = window.innerWidth;
+const height = window.innerHeight;
+const cellsHorizontal = 3
+const cellsVertical = 2
+const unitLengthX = width / cellsHorizontal;
+const unitLengthY = height / cellsVertical;
 
 const render = Render.create({
     element: document.body,
@@ -31,17 +36,19 @@ Runner.run(Runner.create(), engine);
 // Walls
 const walls = [
 Bodies.rectangle(width / 2, 0, width, 2, {
-    isStatic: true
-}),
-Bodies.rectangle(width / 2, height , width, 2, { isStatic: true
+    isStatic: true,
 
 }),
 
-Bodies.rectangle(0,height / 2, 2, height, { isStatic: true
+Bodies.rectangle(width / 2, height , width, 2, { isStatic: true, 
 
 }),
 
-Bodies.rectangle(width,height / 2, 2, height, { isStatic: true
+Bodies.rectangle(0,height / 2, 2, height, { isStatic: true, 
+
+}),
+
+Bodies.rectangle(width,height / 2, 2, height, { isStatic: true,
 
 })
 ]; 
@@ -65,20 +72,20 @@ const shuffle = arr => {
     return arr;
   };
   
-  const grid = Array(cells)
+  const grid = Array(cellsVertical)
     .fill(null)
-    .map(() => Array(cells).fill(false));
+    .map(() => Array(cellsHorizontal).fill(false));
   
-  const verticals = Array(cells)
+  const verticals = Array(cellsVertical)
     .fill(null)
-    .map(() => Array(cells - 1).fill(false));
+    .map(() => Array(cellsHorizontal - 1).fill(false));
   
-  const horizontals = Array(cells - 1)
+  const horizontals = Array(cellsVertical - 1)
     .fill(null)
-    .map(() => Array(cells).fill(false));
+    .map(() => Array(cellsHorizontal).fill(false));
   
-  const startRow = Math.floor(Math.random() * cells);
-  const startColumn = Math.floor(Math.random() * cells);
+  const startRow = Math.floor(Math.random() * cellsVertical);
+  const startColumn = Math.floor(Math.random() * cellsHorizontal);
   
   const drawMaze = (row, column) => {
     // If i have visted the cell then return
@@ -103,9 +110,9 @@ const shuffle = arr => {
       // See if out of bounds
       if (
         nextRow < 0 ||
-        nextRow >= cells ||
+        nextRow >= cellsVertical ||
         nextColumn < 0 ||
-        nextColumn >= cells
+        nextColumn >= cellsHorizontal
       ) {
         continue;
       }
@@ -141,9 +148,11 @@ const shuffle = arr => {
     }
     
     const wall = Bodies.rectangle(
-        columnIndex * unitLength + unitLength / 2,
-        rowIndex * unitLength + unitLength, unitLength, 10, {
-        isStatic: true }
+        columnIndex * unitLengthX + unitLengthX / 2,
+        rowIndex * unitLengthY + unitLengthY, unitLengthX, 5, {
+        isStatic: true,    label: "wall", render: {
+            fillStyle: 'red'
+        } }
     );
     
     Composite.add(world, wall)
@@ -159,11 +168,15 @@ if (open) {
 }
 
 const wall = Bodies.rectangle(
-columnIndex * unitLength + unitLength,
-rowIndex * unitLength + unitLength/2,
-10,
-unitLength, {
-    isStatic: true
+columnIndex * unitLengthX + unitLengthX,
+rowIndex * unitLengthY + unitLengthY/2,
+5,
+unitLengthY, {
+    isStatic: true,
+    label: "wall",
+    render: {
+        fillStyle: 'red'
+    }
 }
 
 
@@ -178,11 +191,13 @@ Composite.add(world, wall);
 // goal drawing
 
 const goal = Bodies.rectangle(
-width - unitLength / 2, 
-height - unitLength / 2, 
-unitLength *.7,
-unitLength *.7, {
-    isStatic: true
+width - unitLengthX / 2, 
+height - unitLengthY / 2, 
+unitLengthX *.7,
+unitLengthY *.7, {
+    isStatic: true,
+    label: 'goal',
+    render: {fillStyle: 'green'}
 }
 );
 
@@ -190,11 +205,13 @@ unitLength *.7, {
 Composite.add(world, goal)
 
 // ball drawing
-
+ballRadius = Math.min(unitLengthX, unitLengthY) / 4
 const ball = Bodies.circle(
-unitLength / 2,
-unitLength / 2, 
-unitLength / 4,
+unitLengthX / 2,
+unitLengthY / 2, 
+ballRadius,
+{label: 'ball',
+render: {fillStyle: 'blue'}}
 
 )
 
@@ -206,6 +223,7 @@ Composite.add(world, ball)
 document.addEventListener('keydown', event => {
 
     const {x, y} = ball.velocity
+    document.querySelector(".instructions").classList.add('hidden')
 
     if(event.code === "KeyW") {
         Body.setVelocity(ball, {x, y: y-5})
@@ -228,4 +246,46 @@ document.addEventListener('keydown', event => {
     
 })
 
-// disable gravity
+// win state
+Events.on(engine,'collisionStart', event => {
+  
+event.pairs.forEach(collision => {
+const labels = ['ball', 'goal'];
+
+if (
+labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label))
+{
+    world.gravity.y = 1;
+    world.bodies.forEach(body => {
+        if (body.label === 'wall') {
+            Body.setStatic(body, false)
+            document.querySelector('.winner').classList.remove('hidden')
+            document.querySelector('.button').classList.remove('hidden')
+        }
+    })
+
+}
+
+
+})
+
+})
+}
+
+
+playGame()
+
+const playBtn = document.querySelector('.button');
+playBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  Composite.clear(world);
+  Engine.clear(engine);
+  Render.stop(render);
+  render.canvas.remove();
+  render.canvas = null;
+  render.context = null;
+  render.textures = {};
+  console.log('reset clicked');
+  document.querySelector('.winner').classList.add('hidden');
+  playGame()
+})
